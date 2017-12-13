@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Board from './App'
+import Board from './app'
 import { convert } from './api'
 import Controller from './controller'
 

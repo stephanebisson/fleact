@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import Board from './App'
+import Board from './app'
 import { convert } from './api'
 
 global.renderFleactServer = function ( apiResponse, action ) {
