@@ -32,9 +32,7 @@ const description = ( state=null, action ) => {
 	if ( action.type === 'edit-header-confirmed' ) {
 		return Object.assign( {}, state, {
 			edit: false,
-			view: {
-				content: action.newContent
-			}
+			view: action.description
 		} )
 	}
 	return state

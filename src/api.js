@@ -20,6 +20,7 @@ const formatPost = ( postId, data ) => {
 const formatDescription = ( rawDesc ) => {
 	return {
 		content: rawDesc.revision.content.content,
+		revisionId: rawDesc.revision.revisionId,
 		user: formatUser( rawDesc.revision.author ),
 		actions: rawDesc.revision.actions
 	}
@@ -34,13 +35,24 @@ export function convert ( apiResponse ) {
 	return { description: { view: description }, topics }
 }
 
-export function getHeader () {
+export function getHeader ( format='wikitext' ) {
 	return new mw.Api().get( {
 		action: 'flow',
 		submodule: 'view-header',
 		page: mw.config.get( 'wgPageName' ),
-		vhformat: 'wikitext'
+		vhformat: format
 	} ).then( function ( response ) {
 		return formatDescription( response.flow['view-header']['result']['header'] )
+	} )
+}
+
+export function saveHeader ( content, previousRevisionId ) {
+	return new mw.Api().postWithToken('csrf', {
+		action: 'flow',
+		submodule: 'edit-header',
+		page: mw.config.get( 'wgPageName' ),
+		ehformat: 'wikitext',
+		ehcontent: content,
+		ehprev_revision: previousRevisionId
 	} )
 }

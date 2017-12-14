@@ -15,11 +15,13 @@ class Editor extends Component {
   }
   render() {
     return (
-      <div>
-        <textarea value={ this.state.content } onChange={ this.handleChange } />
-        <a data-action={ this.props.cancelAction }>Cancel</a>
-        <a data-action={ this.props.saveAction } data-action-params={ JSON.stringify( { content: this.state.content } ) }>Save</a>
-      </div>
+      <form>
+        <textarea value={ this.state.content } onChange={ this.handleChange } rows="5" />
+        <a data-action={ this.props.cancelAction }>Cancel</a>&nbsp;
+        <input type="submit" value="Save"
+          data-action={ this.props.saveAction }
+          data-action-params={ JSON.stringify( { content: this.state.content, previousRevisionId: this.props.previousRevisionId } ) } />
+      </form>
     )
   }
 }
@@ -48,6 +50,7 @@ const EditDesc = ( props ) => (
         <div>Please wait...</div> :
         <Editor
           content={ props.description.content }
+          previousRevisionId={ props.description.revisionId }
           cancelAction="editHeaderCancel"
           saveAction="editHeaderSave" />
     }

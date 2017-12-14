@@ -1,5 +1,5 @@
 import initStore from './store'
-import { getHeader } from './api'
+import { getHeader, saveHeader } from './api'
 
 export default class Controller {
 	constructor( state ) {
@@ -27,7 +27,16 @@ export default class Controller {
 		this.store.dispatch( { type: 'edit-header-cancel' } )
 	}
 
-	editHeaderSave( { content } ) {
-		console.log( 'saving content as', content );
+	editHeaderSave( { content, previousRevisionId } ) {
+		this.store.dispatch( { type: 'edit-header-save' } )
+		saveHeader( content, previousRevisionId ).then(
+			() => {
+				getHeader( 'fixed-html' ).then(
+					( description ) => {
+						this.store.dispatch( { type: 'edit-header-confirmed', description } )
+					}
+				)
+			}
+		)
 	}
 }
