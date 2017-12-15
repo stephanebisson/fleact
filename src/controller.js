@@ -27,16 +27,14 @@ export default class Controller {
 		this.store.dispatch( { type: 'edit-header-cancel' } )
 	}
 
+	editHeaderConfirmed( description ) {
+		this.store.dispatch( { type: 'edit-header-confirmed', description } )
+	}
+
 	editHeaderSave( { content, previousRevisionId } ) {
 		this.store.dispatch( { type: 'edit-header-save' } )
-		saveHeader( content, previousRevisionId ).then(
-			() => {
-				getHeader( 'fixed-html' ).then(
-					( description ) => {
-						this.store.dispatch( { type: 'edit-header-confirmed', description } )
-					}
-				)
-			}
-		)
+		saveHeader( content, previousRevisionId )
+			.then( getHeader.bind( null, 'fixed-html' ) )
+			.then( this.editHeaderConfirmed.bind( this ) )
 	}
 }

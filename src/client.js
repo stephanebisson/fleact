@@ -4,14 +4,13 @@ import Board from './app'
 import { convert } from './api'
 import Controller from './controller'
 
-console.log( 'RAW:', mw.config.get( 'wgFlowData' ) )
+// console.log( 'RAW:', mw.config.get( 'wgFlowData' ) )
 
-const board = convert( mw.config.get( 'wgFlowData' ) ),
-	preRendered = mw.config.get( 'wgFlowPreRendered' )
+const preRendered = mw.config.get( 'wgFlowPreRendered' ),
+	wgFlowData = mw.config.get( 'wgFlowData' ),
+	state = preRendered ? wgFlowData : convert( wgFlowData )
 
-console.log( 'TRANSFORMED:', board )
-
-const controller = new Controller( board )
+const controller = new Controller( state )
 
 const hydrate = ( state ) => {
 	console.time( 'client hydrate' )
