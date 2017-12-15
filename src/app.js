@@ -15,9 +15,15 @@ class Editor extends Component {
   }
   render() {
     return (
-      <form>
-        <textarea value={ this.state.content } onChange={ this.handleChange } rows="5" />
-        <a data-action={ this.props.cancelAction }>Cancel</a>&nbsp;
+      <form method="post" action={ this.props.formActionUrl }>
+        <input type="hidden" name="header_prev_revision" value={ this.props.previousRevisionId } />
+        <input type="hidden" name="wpEditToken" value={ this.props.editToken } />
+        <textarea
+          name="header_content"
+          value={ this.state.content }
+          onChange={ this.handleChange }
+          rows="5" />
+        <a href={ this.props.cancelUrl } data-action={ this.props.cancelAction }>Cancel</a>&nbsp;
         <input type="submit" value="Save"
           data-action={ this.props.saveAction }
           data-action-params={ JSON.stringify( { content: this.state.content, previousRevisionId: this.props.previousRevisionId } ) } />
@@ -51,6 +57,9 @@ const EditDesc = ( props ) => (
         <Editor
           content={ props.description.content }
           previousRevisionId={ props.description.revisionId }
+          formActionUrl={ props.description.actions.edit.url }
+          cancelUrl={ props.description.links.workflow.url }
+          editToken={ props.description.editToken }
           cancelAction="editHeaderCancel"
           saveAction="editHeaderSave" />
     }
@@ -94,8 +103,10 @@ const Topic = ( props ) => (
 const Board = ( props ) => (
   <div className="flow-board">
     <Desc description={ props.description } />
-    <h2>Topics</h2>
+    { !!props.topics.length && <h2>Topics</h2> }
     { props.topics.map( t => <Topic topic={ t } key={ t.id } /> ) }
+    <hr />
+    <pre>{ JSON.stringify( { description: props.description, topics: props.topics }, null, '\t' ) }</pre>
   </div>
 )
 

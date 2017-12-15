@@ -16,11 +16,11 @@ export default class Controller {
 
 	editHeaderPrepare() {
 		this.store.dispatch( { type: 'edit-header-prepare' } )
-		getHeader().then(
-			( description ) => {
-				this.store.dispatch( { type: 'edit-header-ready', description } )
-			}
-		)
+		getHeader().then( this.editHeaderReady.bind( this ) )
+	}
+
+	editHeaderReady( description ) {
+		this.store.dispatch( { type: 'edit-header-ready', description } )
 	}
 
 	editHeaderCancel() {

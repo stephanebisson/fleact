@@ -22,7 +22,9 @@ const formatDescription = ( rawDesc ) => {
 		content: rawDesc.revision.content.content,
 		revisionId: rawDesc.revision.revisionId,
 		user: formatUser( rawDesc.revision.author ),
-		actions: rawDesc.revision.actions
+		actions: rawDesc.revision.actions,
+		links: rawDesc.revision.links,
+		editToken: rawDesc.editToken
 	}
 }
 
@@ -30,7 +32,7 @@ export function convert ( apiResponse ) {
 	const data = apiResponse[ 'blocks' ],
 		description = formatDescription( data[ 'header' ] ),
 		topicList = data[ 'topiclist' ],
-		topics = topicList.roots.map( ( root ) => formatPost( root, topicList ) )
+		topics = topicList ? topicList.roots.map( ( root ) => formatPost( root, topicList ) ) : []
 
 	return { description: { view: description }, topics }
 }
