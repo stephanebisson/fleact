@@ -13,7 +13,9 @@ global.renderFleactServer = function ( apiResponse, action ) {
 	}
 	const state = controller.getState()
 
-	return ReactDOMServer.renderToString( 
+	const markup = ReactDOMServer.renderToString(
 		<Board description={state.description} topics={state.topics} />
 	)
+
+	return { state: JSON.stringify( state ), markup }
 }
